@@ -32,7 +32,14 @@ app.use('/api/settings', require('./routes/settings'));
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Hardware Shop API running', timestamp: new Date() });
 });
-
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://hardware-shop.vercel.app',     // your Vercel URL
+    process.env.FRONTEND_URL || ''
+  ],
+  credentials: true
+}));
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: err.message });
