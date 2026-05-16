@@ -3,95 +3,143 @@ import { useAuth } from '../utils/AuthContext';
 import { useState } from 'react';
 
 const nav = [
-  { path: '/', label: 'Dashboard', icon: '📊' },
-  { path: '/customers', label: 'Customers', icon: '👥' },
-  { path: '/jobs', label: 'Job Orders', icon: '📋' },
-  { path: '/paint-estimator', label: 'Paint Estimator', icon: '🎨' },
-  { path: '/repair-estimator', label: 'Repair Estimator', icon: '🔧' },
-  { path: '/inventory', label: 'Inventory', icon: '📦' },
-  { path: '/invoices', label: 'Invoices', icon: '💰' },
-  { path: '/charts', label: 'Analytics', icon: '📊' },
-  { path: '/settings', label: 'Settings', icon: '⚙️' },
+  { path: '/', label: 'Dashboard', icon: 'ti-layout-dashboard' },
+  { path: '/customers', label: 'Customers', icon: 'ti-users' },
+  { path: '/jobs', label: 'Job Orders', icon: 'ti-clipboard' },
+  { path: '/paint-estimator', label: 'Paint Estimator', icon: 'ti-paint' },
+  { path: '/repair-estimator', label: 'Repair Estimator', icon: 'ti-tool' },
+  { path: '/inventory', label: 'Inventory', icon: 'ti-package' },
+  { path: '/invoices', label: 'Invoices', icon: 'ti-receipt' },
+  { path: '/charts', label: 'Analytics', icon: 'ti-chart-bar' },
+  { path: '/settings', label: 'Settings', icon: 'ti-settings' },
 ];
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleLogout = () => { logout(); navigate('/login'); };
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Overlay for mobile */}
-      {sidebarOpen && (
-        <div onClick={() => setSidebarOpen(false)}
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 99, display: 'none' }}
-          className="mobile-overlay" />
-      )}
+    <div style={{
+      display: 'flex',
+      minHeight: '100vh',
+      background: '#f4f6f9'
+    }}>
 
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <aside style={{
-        width: 240, background: '#2d3436', color: 'white', display: 'flex',
-        flexDirection: 'column', position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 100,
-        transform: sidebarOpen ? 'translateX(0)' : undefined
+        width: 260,
+        background: 'linear-gradient(180deg, #0f172a, #111827)',
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        height: '100vh',
+        padding: '20px 0'
       }}>
+
         {/* Logo */}
-        <div style={{ padding: '24px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#e17055' }}>🏪 HardwareShop</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Repair & Paint Estimator</div>
+        <div style={{
+          padding: '20px',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          marginBottom: 10
+        }}>
+          <div style={{ fontSize: 18, fontWeight: 700 }}>
+            🏪 HardwareShop
+          </div>
+          <div style={{ fontSize: 11, opacity: 0.6 }}>
+            Paint & Repair System
+          </div>
         </div>
 
-        {/* Nav links */}
-        <nav style={{ flex: 1, padding: '16px 0', overflowY: 'auto' }}>
+        {/* NAV */}
+        <nav style={{
+          flex: 1,
+          padding: '10px 8px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 6
+        }}>
           {nav.map(({ path, label, icon }) => (
-            <NavLink key={path} to={path} end={path === '/'}
+            <NavLink
+              key={path}
+              to={path}
+              end={path === '/'}
               style={({ isActive }) => ({
-                display: 'flex', alignItems: 'center', gap: 12,
-                padding: '11px 20px', color: isActive ? '#e17055' : 'rgba(255,255,255,0.75)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '12px 14px',
+                margin: '0 10px',
+                borderRadius: 10,
+                textDecoration: 'none',
+                color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
                 background: isActive ? 'rgba(225,112,85,0.15)' : 'transparent',
-                textDecoration: 'none', fontSize: 14, fontWeight: isActive ? 600 : 400,
-                borderRight: isActive ? '3px solid #e17055' : '3px solid transparent',
-                transition: 'all 0.15s'
-              })}>
-              <span style={{ fontSize: 16 }}>{icon}</span>
-              {label}
+                borderLeft: isActive ? '4px solid #e17055' : '4px solid transparent',
+                transition: '0.2s'
+              })}
+            >
+              <i className={`ti ${icon}`} style={{ fontSize: 18 }} />
+              <span style={{ fontSize: 14 }}>{label}</span>
             </NavLink>
           ))}
         </nav>
 
-        {/* User info */}
-        <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', marginBottom: 4 }}>
-            👤 {user?.name}
-          </div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 12 }}>
+        {/* USER */}
+        <div style={{
+          padding: '16px',
+          borderTop: '1px solid rgba(255,255,255,0.08)'
+        }}>
+          <div style={{ fontSize: 13 }}>{user?.name}</div>
+          <div style={{ fontSize: 11, opacity: 0.6 }}>
             {user?.role?.toUpperCase()}
           </div>
-          <button onClick={handleLogout}
-            style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.15)', borderRadius: 6,
-              color: 'rgba(255,255,255,0.75)', cursor: 'pointer', fontSize: 13 }}>
-            🚪 Logout
+
+          <button
+            onClick={handleLogout}
+            style={{
+              marginTop: 10,
+              width: '100%',
+              padding: 10,
+              borderRadius: 8,
+              border: 'none',
+              cursor: 'pointer',
+              background: 'rgba(255,255,255,0.08)',
+              color: 'white'
+            }}
+          >
+            Logout
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
-      <main style={{ marginLeft: 240, flex: 1, minHeight: '100vh' }}>
-        {/* Top bar */}
-        <div style={{ background: 'white', padding: '14px 28px', borderBottom: '1px solid #dfe6e9',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          position: 'sticky', top: 0, zIndex: 50, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-          <div style={{ fontSize: 14, color: '#636e72' }}>Welcome back, <strong>{user?.name}</strong> 👋</div>
-          <div style={{ fontSize: 13, color: '#636e72' }}>{new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
-        </div>
+      {/* MAIN CONTENT */}
+      <main style={{
+        marginLeft: 260,
+        width: 'calc(100% - 260px)',
+        minHeight: '100vh',
+        padding: '24px',
+        boxSizing: 'border-box'
+       
+      }}>
 
-        {/* Page content */}
-        <div style={{ padding: 28 }}>
+        <div style={{
+          background: '#ffffff7a',
+          borderRadius: 12,
+          minHeight: 'calc(100vh - 48px)',
+          padding: 20,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
+        }}>
           <Outlet />
         </div>
       </main>
+
     </div>
   );
 }

@@ -13,6 +13,11 @@ import Invoices from './pages/Invoices';
 import './index.css';
 import Charts from './pages/Charts';
 import Settings from './pages/Settings';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth();

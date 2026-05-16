@@ -2,7 +2,9 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f5f6fa;
+ background: linear-gradient(135deg, #f0f8ff 0%, #f0ffff 50%, #f0fff8 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
   color: #2d3436;
 }
 
@@ -97,4 +99,175 @@ tr:hover td { background: #fafafa; }
   .form-row, .form-row-3 { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+/* 3D card animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Apply to stat cards */
+.stat-card {
+  animation: slideInUp 0.5s ease forwards;
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px) rotateX(4deg) rotateY(2deg);
+}
+
+/* Floating icon */
+.stat-card .icon {
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Page enter animation */
+.card {
+  animation: fadeInScale 0.4s ease forwards;
+}
+
+/* Sidebar icon animation */
+.sidebar-icon {
+  transition: transform 0.2s ease;
+}
+.sidebar-icon:hover {
+  transform: scale(1.2) rotate(-5deg);
+}
+
+/* Button 3D press effect */
+.btn:active {
+  transform: scale(0.96) translateY(1px);
+}
+
+/* Progress bar animation */
+@keyframes fillBar {
+  from { width: 0%; }
+}
+.progress-fill {
+  animation: fillBar 1s ease forwards;
+}
+
+/* 3D card animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Apply to stat cards */
+.stat-card {
+  animation: slideInUp 0.5s ease forwards;
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px) rotateX(4deg) rotateY(2deg);
+}
+
+/* Floating icon */
+.stat-card .icon {
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Page enter animation */
+.card {
+  animation: fadeInScale 0.4s ease forwards;
+}
+
+/* Sidebar icon animation */
+.sidebar-icon {
+  transition: transform 0.2s ease;
+}
+.sidebar-icon:hover {
+  transform: scale(1.2) rotate(-5deg);
+}
+
+/* Button 3D press effect */
+.btn:active {
+  transform: scale(0.96) translateY(1px);
+}
+
+/* Progress bar animation */
+@keyframes fillBar {
+  from { width: 0%; }
+}
+.progress-fill {
+  animation: fillBar 1s ease forwards;
+}
+
+* {
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f5f6fa;
+  overflow-x: hidden;
+}
+
+/* Soft hardware/paint image layer */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1581092918056-0c4c3acd3789");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  z-index: -2;
+}
+
+/* White overlay for readability */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: -1;
+}
+
+
+.stat-card, .card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
 }
