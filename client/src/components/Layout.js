@@ -1,145 +1,157 @@
+import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
-import { useState } from 'react';
 
 const nav = [
-  { path: '/', label: 'Dashboard', icon: 'ti-layout-dashboard' },
-  { path: '/customers', label: 'Customers', icon: 'ti-users' },
-  { path: '/jobs', label: 'Job Orders', icon: 'ti-clipboard' },
-  { path: '/paint-estimator', label: 'Paint Estimator', icon: 'ti-paint' },
+  { path: '/',                 label: 'Dashboard',        icon: 'ti-layout-dashboard' },
+  { path: '/customers',        label: 'Customers',        icon: 'ti-users' },
+  { path: '/jobs',             label: 'Job Orders',       icon: 'ti-clipboard-list' },
+  { path: '/paint-estimator',  label: 'Paint Estimator',  icon: 'ti-paint' },
   { path: '/repair-estimator', label: 'Repair Estimator', icon: 'ti-tool' },
-  { path: '/inventory', label: 'Inventory', icon: 'ti-package' },
-  { path: '/invoices', label: 'Invoices', icon: 'ti-receipt' },
-  { path: '/charts', label: 'Analytics', icon: 'ti-chart-bar' },
-  { path: '/settings', label: 'Settings', icon: 'ti-settings' },
+  { path: '/inventory',        label: 'Inventory',        icon: 'ti-package' },
+  { path: '/invoices',         label: 'Invoices',         icon: 'ti-receipt' },
+  { path: '/charts',           label: 'Analytics',        icon: 'ti-chart-bar' },
+  { path: '/settings',         label: 'Settings',         icon: 'ti-settings' },
 ];
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const handleLogout = () => { logout(); navigate('/login'); };
+  const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div style={{
-      display: 'flex',
-      minHeight: '100vh',
-      background: '#f4f6f9'
-    }}>
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
 
-      {/* SIDEBAR */}
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          onClick={closeSidebar}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            zIndex: 998,
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
       <aside style={{
-        width: 260,
-        background: 'linear-gradient(180deg, #0f172a, #111827)',
+        width: 240,
+        background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
         color: 'white',
         display: 'flex',
         flexDirection: 'column',
         position: 'fixed',
-        top: 0,
-        left: 0,
+        top: 0, left: 0,
         height: '100vh',
-        padding: '20px 0'
-      }}>
+        zIndex: 999,
+        transition: 'transform 0.3s ease',
+        transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+        overflowY: 'auto',
+      }}
+      className="sidebar">
 
         {/* Logo */}
-        <div style={{
-          padding: '20px',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
-          marginBottom: 10
-        }}>
-          <div style={{ fontSize: 18, fontWeight: 700 }}>
-            🏪 HardwareShop
+        <div style={{ padding: '20px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#e17055,#d63031)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <i className="ti ti-building-store" style={{ color: 'white', fontSize: 18 }} aria-hidden="true" />
+            </div>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: 'white' }}>HardwareShop</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>Management System</div>
+            </div>
           </div>
-          <div style={{ fontSize: 11, opacity: 0.6 }}>
-            Paint & Repair System
-          </div>
+          {/* Close button on mobile */}
+          <button onClick={closeSidebar}
+            style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: 20, padding: 4 }}>
+            <i className="ti ti-x" aria-hidden="true" />
+          </button>
         </div>
 
-        {/* NAV */}
-        <nav style={{
-          flex: 1,
-          padding: '10px 8px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 6
-        }}>
+        {/* Nav */}
+        <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }}>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', padding: '0 8px', marginBottom: 6, letterSpacing: 1 }}>MAIN MENU</div>
           {nav.map(({ path, label, icon }) => (
-            <NavLink
-              key={path}
-              to={path}
-              end={path === '/'}
+            <NavLink key={path} to={path} end={path === '/'}
+              onClick={closeSidebar}
               style={({ isActive }) => ({
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                padding: '12px 14px',
-                margin: '0 10px',
-                borderRadius: 10,
-                textDecoration: 'none',
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
-                background: isActive ? 'rgba(225,112,85,0.15)' : 'transparent',
-                borderLeft: isActive ? '4px solid #e17055' : '4px solid transparent',
-                transition: '0.2s'
-              })}
-            >
-              <i className={`ti ${icon}`} style={{ fontSize: 18 }} />
-              <span style={{ fontSize: 14 }}>{label}</span>
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 12px', borderRadius: 9,
+                color: isActive ? 'white' : 'rgba(255,255,255,0.65)',
+                background: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                textDecoration: 'none', fontSize: 13,
+                fontWeight: isActive ? 600 : 400,
+                marginBottom: 2,
+                transition: 'all 0.18s',
+                borderRight: isActive ? '3px solid #e17055' : '3px solid transparent',
+              })}>
+              <i className={`ti ${icon}`} style={{ fontSize: 17 }} aria-hidden="true" />
+              {label}
             </NavLink>
           ))}
         </nav>
 
-        {/* USER */}
-        <div style={{
-          padding: '16px',
-          borderTop: '1px solid rgba(255,255,255,0.08)'
-        }}>
-          <div style={{ fontSize: 13 }}>{user?.name}</div>
-          <div style={{ fontSize: 11, opacity: 0.6 }}>
-            {user?.role?.toUpperCase()}
+        {/* User info */}
+        <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#e17055,#d63031)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: 'white' }}>
+              {user?.name?.[0] || 'A'}
+            </div>
+            <div>
+              <div style={{ fontSize: 13, color: 'white', fontWeight: 500 }}>{user?.name}</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>{user?.role?.toUpperCase()}</div>
+            </div>
           </div>
-
-          <button
-            onClick={handleLogout}
-            style={{
-              marginTop: 10,
-              width: '100%',
-              padding: 10,
-              borderRadius: 8,
-              border: 'none',
-              cursor: 'pointer',
-              background: 'rgba(255,255,255,0.08)',
-              color: 'white'
-            }}
-          >
-            Logout
+          <button onClick={handleLogout}
+            style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'rgba(255,255,255,0.75)', cursor: 'pointer', fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <i className="ti ti-logout" aria-hidden="true" /> Logout
           </button>
         </div>
       </aside>
 
-      {/* MAIN CONTENT */}
-      <main style={{
-        marginLeft: 260,
-        width: 'calc(100% - 260px)',
-        minHeight: '100vh',
-        padding: '24px',
-        boxSizing: 'border-box'
-       
-      }}>
+      {/* Desktop sidebar - always visible on large screens */}
+      <style>{`
+        @media (min-width: 768px) {
+          .sidebar { transform: translateX(0) !important; }
+          .main-content { margin-left: 240px !important; }
+          .mobile-topbar-menu { display: none !important; }
+        }
+        @media (max-width: 767px) {
+          .main-content { margin-left: 0 !important; }
+        }
+      `}</style>
 
-        <div style={{
-          background: '#ffffff7a',
-          borderRadius: 12,
-          minHeight: 'calc(100vh - 48px)',
-          padding: 20,
-          boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
-        }}>
+      {/* Main content */}
+      <main className="main-content" style={{ flex: 1, minHeight: '100vh', background: 'linear-gradient(135deg, #f0f4ff 0%, #fdf0ff 50%, #f0fff8 100%)' }}>
+
+        {/* Top bar */}
+        <div style={{ background: 'white', padding: '12px 20px', borderBottom: '1px solid #dfe6e9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+
+          {/* Hamburger menu - mobile only */}
+          <button
+            className="mobile-topbar-menu"
+            onClick={() => setSidebarOpen(true)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 24, color: '#2d3436', padding: 4, display: 'flex', alignItems: 'center' }}>
+            <i className="ti ti-menu-2" aria-hidden="true" />
+          </button>
+
+          <div style={{ fontSize: 14, color: '#636e72' }}>
+            Welcome back, <strong>{user?.name}</strong>
+          </div>
+          <div style={{ fontSize: 12, color: '#636e72' }}>
+            {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+          </div>
+        </div>
+
+        {/* Page content */}
+        <div style={{ padding: '20px 16px' }}>
           <Outlet />
         </div>
       </main>
-
     </div>
   );
 }
