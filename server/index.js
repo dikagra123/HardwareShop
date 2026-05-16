@@ -35,11 +35,13 @@ app.get('/api/health', (req, res) => {
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://hardware-shop.vercel.app',     // your Vercel URL
-    process.env.FRONTEND_URL || ''
+    'https://hardware-shop1.onrender.com',
+    'https://hardware-shop-nine.vercel.app',
+    'https://hardwareshop03.netlify.app/'  // ← add your Netlify URL
   ],
   credentials: true
 }));
+  
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: err.message });
