@@ -33,13 +33,13 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Hardware Shop API running', timestamp: new Date() });
 });
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://hardware-shop1.onrender.com',
-    // 'https://hardware-shop-nine.vercel.app',
-    'https://hardwareshop03.netlify.app/'  // ← add your Netlify URL
-  ],
-  credentials: true
+  origin : '*' ,
+  //   'http://localhost:3000',
+  //   'https://hardware-shop1.onrender.com',
+  //   // 'https://hardware-shop-nine.vercel.app',
+  //   'https://hardwareshop03.netlify.app/'  // ← add your Netlify URL
+  // ],
+  credentials: false
 }));
   
 app.use((err, req, res, next) => {
