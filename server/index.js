@@ -36,7 +36,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://hardware-shop1.onrender.com',
-    'https://hardware-shop-nine.vercel.app',
+    // 'https://hardware-shop-nine.vercel.app',
     'https://hardwareshop03.netlify.app/'  // ← add your Netlify URL
   ],
   credentials: true
