@@ -29,9 +29,16 @@ router.patch('/:id/stock', async (req, res) => {
   const { quantity, operation } = req.body;
   const inc = operation === 'subtract' ? -parseFloat(quantity) : parseFloat(quantity);
   try {
-    const material = await Material.findByIdAndUpdate(req.params.id, { $inc: { stockQuantity: inc } }, { new: true });
+    const material = await Material.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { stockQuantity: inc } },
+      { new: true }
+    );
+    if (!material) return res.status(404).json({ error: 'Item not found' });
     res.json(material);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.put('/:id', async (req, res) => {
