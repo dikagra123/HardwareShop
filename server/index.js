@@ -23,6 +23,9 @@ app.use((req, res, next) => {
 app.use(cors({ origin: '*', credentials: false }));
 app.use(express.json());
 
+app.use('/api/customer-auth',   require('./routes/customerAuth'));
+app.use('/api/customer-portal', require('./routes/customerPortal'));
+
 // Serve uploaded images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

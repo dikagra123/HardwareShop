@@ -129,3 +129,10 @@ export default function Login() {
     </div>
   );
 }
+
+<div style={{ textAlign: 'center', marginTop: 16 }}>
+  <a href="/customer/login"
+    style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, textDecoration: 'none' }}>
+    Are you a customer? → Customer Login
+  </a>
+</div>
