@@ -2,12 +2,68 @@ import { useState } from 'react';
 import { calculatePaint } from '../api';
 
 const paintBrands = [
-  { name: 'Asian Paints Emulsion Interior', price: 280 },
-  { name: 'Berger Easy Clean Interior', price: 260 },
-  { name: 'Nerolac Excel Total', price: 310 },
-  { name: 'Asian Paints Exterior', price: 320 },
-  { name: 'Berger Weathercoat Exterior', price: 340 },
-  { name: 'Asian Paints Primer', price: 180 },
+  // ── ASIAN PAINTS INTERIOR EMULSIONS ──
+  { name: 'Asian Paints Royale Luxury Emulsion',     price: 764  }, // 20L = ₹15280
+  { name: 'Asian Paints Royale Atmos',               price: 490  }, // 20L = ₹9790
+  { name: 'Asian Paints Royale Shyne',               price: 450  }, // 20L = ₹8996
+  { name: 'Asian Paints Apcolite Premium Emulsion',  price: 438  }, // 20L = ₹8750
+  { name: 'Asian Paints Apcolite Advanced Emulsion', price: 274  }, // 20L = ₹5479
+  { name: 'Asian Paints Royale Wall Basecoat',       price: 160  }, // 20L = ₹3206
+  { name: 'Asian Paints Ace Advanced',               price: 133  }, // 20L = ₹2668
+
+  // ── ASIAN PAINTS EXTERIOR ──
+  { name: 'Asian Paints Apex Floor Guard',           price: 707  }, // 4L = ₹2826
+  { name: 'Asian Paints Woodtech Aquadur PU',        price: 713  }, // 4L = ₹2850
+
+  // ── ASIAN PAINTS PRIMERS ──
+  { name: 'Asian Paints Trucare Exterior Primer',    price: 129  }, // 20L = ₹2574
+  { name: 'Asian Paints Decoprime Cement Primer',    price: 165  }, // 20L = ₹3300
+  { name: 'Asian Paints Trucare Interior Primer',    price: 147  }, // 20L = ₹2934
+
+  // ── ASIAN PAINTS SPECIAL EFFECTS ──
+  { name: 'Asian Paints Royale Play Dune',           price: 1670 }, // 1L = ₹1670
+  { name: 'Asian Paints Royale Play Metallics',      price: 1815 }, // 1L = ₹1815
+  { name: 'Asian Paints Royale Play Special Effects',price: 1818 }, // 1L = ₹1818
+
+  // ── ASIAN PAINTS WOOD FINISHES ──
+  { name: 'Asian Paints Woodtech Wood Stains',       price: 300  }, // 5L = ₹1500
+  { name: 'Asian Paints Woodtech Melamyne',          price: 245  }, // 20L = ₹4900
+  { name: 'Asian Paints Woodtech PU Palette Interior',price: 675 }, // 4L = ₹2700
+  { name: 'Asian Paints Woodtech PU Palette Exterior',price: 700 }, // 4L = ₹2800
+
+  // ── BERGER PAINTS ──
+  { name: 'Berger Easy Clean Interior',              price: 364  },
+  { name: 'Berger Silk Glamor Luxury Emulsion',      price: 434  },
+  { name: 'Berger WeatherCoat Long Life Exterior',   price: 300  },
+  { name: 'Berger WeatherCoat Champ Exterior',       price: 311  },
+  { name: 'Berger Rangoli Total Care',               price: 253  },
+  { name: 'Berger Bison Acrylic Emulsion',           price: 230  },
+  { name: 'Berger Luxol Hi-Gloss Enamel',            price: 239  },
+
+  // ── NEROLAC ──
+  { name: 'Nerolac Excel Total Exterior',            price: 310  },
+  { name: 'Nerolac Impressions Interior',            price: 390  },
+  { name: 'Nerolac Beauty Gold Emulsion',            price: 260  },
+
+  // ── NEROLAC PAINTS ──
+{ name: 'Nerolac Impressions Eco Clean',      price: 553  }, // 20L = ₹11069
+{ name: 'Nerolac Impressions 24 Carat',       price: 499  }, // 20L = ₹9982
+{ name: 'Nerolac Excel Total',                price: 405  }, // 20L = ₹8103
+{ name: 'Nerolac Beauty Gold',                price: 275  }, // 20L = ₹5507
+{ name: 'Nerolac Pearls Emulsion',            price: 263  }, // 20L = ₹5264
+{ name: 'Nerolac Excel',                      price: 262  }, // 20L = ₹5247
+{ name: 'Nerolac Excel Tile Guard',           price: 262  }, // 20L = ₹5237
+{ name: 'Nerolac Excel Mica Marble',          price: 322  }, // 20L = ₹6435
+{ name: 'Nerolac Excel Everlast',             price: 183  }, // 20L = ₹3659
+{ name: 'Nerolac Beauty Silver',              price: 176  }, // 20L = ₹3524
+{ name: 'Nerolac Suraksha Advanced',          price: 173  }, // 20L = ₹3469
+{ name: 'Nerolac Suraksha Plus',              price: 152  }, // 20L = ₹3038
+{ name: 'Nerolac Excel Anti Peel',            price: 135  }, // 20L = ₹2700
+{ name: 'Nerolac Lotus Touch',                price: 241  }, // 20L = ₹4815
+{ name: 'Nerolac Little Master',              price: 111  }, // 20L = ₹2211
+{ name: 'Nerolac Suraksha',                   price: 77   }, // 20L = ₹1535
+{ name: 'Nerolac Beauty Smooth Finish',       price: 83   }, // 20L = ₹1668
+{ name: 'Nerolac Pearls Lustre Finish',       price: 268  }, // 1L  = ₹268
 ];
 
 const finishTypes = ['Matte', 'Satin', 'Eggshell', 'Semi-Gloss', 'Glossy'];
