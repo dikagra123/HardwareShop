@@ -31,14 +31,23 @@ export default function JobDetail() {
     } catch { alert('Update failed'); }
   };
 
-  const handleCreateInvoice = async () => {
-    if (job.invoice) return alert('Invoice already exists');
-    try {
-      await createInvoice({ jobId: id, taxPercent: 0 });
-      setMsg('✅ Invoice created!');
-      load();
-    } catch { alert('Failed to create invoice'); }
-  };
+ const handleCreateInvoice = async () => {
+  if (job.invoice) {
+    alert('Invoice already exists for this job!');
+    return;
+  }
+  try {
+    await createInvoice({
+      jobId: id,
+      taxPercent: 0,
+      discount: 0
+    });
+    setMsg('✅ Invoice generated successfully!');
+    load();
+  } catch (err) {
+    setMsg('❌ ' + (err.response?.data?.error || 'Failed to generate invoice'));
+  }
+};
 
   // ── WhatsApp notification sender ──────────────────────────────
   const sendNotification = async (type, label) => {
@@ -93,24 +102,30 @@ export default function JobDetail() {
   return (
     <div>
       {/* Header */}
-      <div className="page-header">
-        <div>
-          <Link to="/jobs" style={{ color: '#636e72', fontSize: 14 }}>← Back to Jobs</Link>
-          <h1 className="page-title" style={{ marginTop: 4 }}>
-            Job #{id.slice(-5).toUpperCase()}
-          </h1>
-          <div style={{ fontSize: 13, color: '#636e72', marginTop: 2 }}>
-            Customer: <strong>{customerName}</strong> • {customerPhone}
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          {!job.invoice && job.totalEstimate > 0 && (
-            <button onClick={handleCreateInvoice} className="btn btn-success">
-              📄 Create Invoice
-            </button>
-          )}
-        </div>
-      </div>
+     {/* Header */}
+<div className="page-header">
+  <div>
+    <Link to="/jobs" style={{ color: '#636e72', fontSize: 14 }}>← Back to Jobs</Link>
+    <h1 className="page-title" style={{ marginTop: 4 }}>
+      Job #{id.toString().slice(-5).toUpperCase()}
+    </h1>
+    <div style={{ fontSize: 13, color: '#636e72', marginTop: 2 }}>
+      Customer: <strong>{job.customer?.name || job.customer_name}</strong>
+    </div>
+  </div>
+  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+    {!job.invoice && (
+      <button onClick={handleCreateInvoice} className="btn btn-success">
+        📄 Generate Invoice
+      </button>
+    )}
+    {job.invoice && (
+      <span style={{ background: '#d4edda', color: '#155724', padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
+        ✅ Invoice Generated
+      </span>
+    )}
+  </div>
+</div>
 
       {msg && (
         <div className={`alert ${msg.includes('✅') ? 'alert-success' : 'alert-danger'}`}
