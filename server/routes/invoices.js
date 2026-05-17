@@ -9,10 +9,15 @@ router.use(authMiddleware);
 router.get('/', async (req, res) => {
   try {
     const invoices = await Invoice.find()
-      .populate({ path: 'job', populate: { path: 'customer', select: 'name phone' } })
+      .populate({
+        path: 'job',
+        populate: { path: 'customer', select: 'name phone' }
+      })
       .sort({ createdAt: -1 });
     res.json(invoices);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.post('/', async (req, res) => {
