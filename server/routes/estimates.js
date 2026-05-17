@@ -5,16 +5,37 @@ const Material = require('../models/Material');
 const { authMiddleware } = require('../middleware/auth');
 
 function calculatePaintEstimate({ length, width, height, numDoors, numWindows, numCoats, pricePerLiter }) {
+
+  // All measurements in FEET
   const wallArea = 2 * (length * height + width * height);
   const ceilingArea = length * width;
-  const paintableArea = Math.max(0, wallArea + ceilingArea - (numDoors || 0) * 1.89 - (numWindows || 0) * 1.4);
-  const litersNeeded = parseFloat(((paintableArea / 10) * (numCoats || 2)).toFixed(2));
-  const paintCost = parseFloat((litersNeeded * (pricePerLiter || 280)).toFixed(2));
-  const laborCost = parseFloat((paintableArea * 15).toFixed(2));
-  const totalCost = parseFloat((paintCost + laborCost).toFixed(2));
-  return { paintableArea: parseFloat(paintableArea.toFixed(2)), litersNeeded, paintCost, laborCost, totalCost };
-}
+  const totalArea = wallArea + ceilingArea;
 
+  // Door = 7×3 = 21 sqft, Window = 4×3 = 12 sqft
+  const doorDeduction   = (numDoors   || 0) * 21;
+  const windowDeduction = (numWindows || 0) * 12;
+  const paintableArea   = Math.max(0, totalArea - doorDeduction - windowDeduction);
+
+  // 1 liter covers 120 sqft (standard for Indian paints)
+  const coveragePerLiter = 120;
+  const litersNeeded = parseFloat(((paintableArea / coveragePerLiter) * (numCoats || 2)).toFixed(2));
+
+  // Paint cost
+  const paintCost = parseFloat((litersNeeded * (pricePerLiter || 280)).toFixed(2));
+
+  // Labour ₹8 per sqft (Indian standard)
+  const laborCost = parseFloat((paintableArea * 8).toFixed(2));
+
+  const totalCost = parseFloat((paintCost + laborCost).toFixed(2));
+
+  return {
+    paintableArea: parseFloat(paintableArea.toFixed(2)),
+    litersNeeded,
+    paintCost,
+    laborCost,
+    totalCost
+  };
+}
 router.post('/paint/calculate', async (req, res) => {
   try {
     const { length, width, height, numDoors, numWindows, numCoats, brand } = req.body;
