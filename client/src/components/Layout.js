@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 
+
+
+
+
 const nav = [
   { path: '/',                 label: 'Dashboard',        icon: 'ti-layout-dashboard' },
   { path: '/customers',        label: 'Customers',        icon: 'ti-users' },
