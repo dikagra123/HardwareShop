@@ -6,7 +6,7 @@ import AOS from 'aos';
 
 
 
-
+export const createInvoice = (data) => API.post('/api/invoices', data);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<React.StrictMode><App /></React.StrictMode>);

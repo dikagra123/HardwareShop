@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Job = require('../models/Job');
 const { authMiddleware } = require('../middleware/auth');
+const Invoice = require('../models/Invoice');
 
 router.use(authMiddleware);
 
@@ -24,17 +25,49 @@ router.get('/:id', async (req, res) => {
       .populate('customer', 'name phone email')
       .populate('worker', 'name phone');
     if (!job) return res.status(404).json({ error: 'Job not found' });
-    res.json(job);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+
+    // Get invoice for this job
+    const invoice = await Invoice.findOne({ job: req.params.id });
+
+    res.json({ ...job.toObject(), invoice: invoice || null });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.post('/', async (req, res) => {
-  const { customerId, jobType, description, address, scheduledDate, notes } = req.body;
-  if (!customerId || !jobType) return res.status(400).json({ error: 'Customer and job type required' });
+  const { jobId, taxPercent, discount } = req.body;
   try {
-    const job = await Job.create({ customer: customerId, jobType, description, address, scheduledDate, notes });
-    res.status(201).json(job);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    // Check if invoice already exists
+    const existing = await Invoice.findOne({ job: jobId });
+    if (existing) return res.status(400).json({ error: 'Invoice already exists for this job' });
+
+    const job = await Job.findById(jobId).populate('customer');
+    if (!job) return res.status(404).json({ error: 'Job not found' });
+
+    const subtotal = parseFloat(job.totalEstimate || 0);
+    const tax = parseFloat(taxPercent || 0);
+    const disc = parseFloat(discount || 0);
+    const taxAmount = parseFloat(((subtotal * tax) / 100).toFixed(2));
+    const totalAmount = parseFloat((subtotal + taxAmount - disc).toFixed(2));
+    const invoiceNumber = `INV-${Date.now()}`;
+
+    const invoice = await Invoice.create({
+      job: jobId,
+      invoiceNumber,
+      subtotal,
+      taxPercent: tax,
+      taxAmount,
+      discount: disc,
+      totalAmount,
+      paidAmount: 0,
+      paymentStatus: 'unpaid'
+    });
+
+    res.status(201).json(invoice);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.patch('/:id/status', async (req, res) => {
