@@ -18,6 +18,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Add imports at top
 import CustomerLogin from './pages/CustomerLogin';
 import CustomerDashboard from './pages/CustomerDashboard';
+import PaintRecommendation from './pages/PaintRecommendation';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,6 +44,7 @@ function App() {
             <Route path="inventory" element={<Inventory />} />
             <Route path="invoices" element={<Invoices />} />
             <Route path="charts" element={<Charts />} />
+            <Route path="paint-recommendation" element={<PaintRecommendation />} />
             <Route path="settings" element={<Settings />} />
             {/* // Add routes inside <Routes> (outside PrivateRoute) */}
 <Route path="/customer/login" element={<CustomerLogin />} />

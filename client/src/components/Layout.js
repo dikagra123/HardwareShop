@@ -16,6 +16,7 @@ const nav = [
   { path: '/invoices',         label: 'Invoices',         icon: 'ti-receipt' },
   { path: '/charts',           label: 'Analytics',        icon: 'ti-chart-bar' },
   { path: '/settings',         label: 'Settings',         icon: 'ti-settings' },
+  { path: '/paint-recommendation', label: 'Paint Guide', icon: 'ti-bulb' },
 ];
 
 export default function Layout() {
