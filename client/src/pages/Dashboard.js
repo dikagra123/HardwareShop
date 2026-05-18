@@ -57,39 +57,57 @@ useEffect(() => {
     <div>
       {/* Header */}
 
-      <div className="page-header">
+     {/* Header */}
+<div className="page-header" style={{
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 24,
+  flexWrap: 'wrap',
+  gap: 16
+}}>
+  
   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
     {logoUrl && (
-      <img src={logoUrl} alt="Shop Logo"
-        style={{ width: 48, height: 48, borderRadius: 10,
-          objectFit: 'contain', background: 'white',
-          padding: 4, border: '1px solid #dfe6e9' }} />
+      <img
+        src={logoUrl}
+        alt="Shop Logo"
+        style={{
+          width: 48,
+          height: 48,
+          borderRadius: 10,
+          objectFit: 'contain',
+          background: 'white',
+          padding: 4,
+          border: '1px solid #dfe6e9'
+        }}
+      />
     )}
+
     <div>
       <h1 className="page-title">Dashboard</h1>
-      <p style={{ color: '#636e72', fontSize: 14, marginTop: 4 }}>
+
+      <p style={{
+        color: '#636e72',
+        fontSize: 14,
+        marginTop: 4
+      }}>
         Monitor your hardware business analytics
       </p>
     </div>
   </div>
-</div>
 
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Dashboard</h1>
-          <p style={{ color: '#636e72', fontSize: 14, marginTop: 4 }}>
-            Monitor your hardware business analytics
-          </p>
-        </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <Link to="/paint-estimator" className="btn btn-primary">
-            <i className="ti ti-paint" aria-hidden="true" /> New Paint Estimate
-          </Link>
-          <Link to="/repair-estimator" className="btn btn-secondary">
-            <i className="ti ti-tool" aria-hidden="true" /> New Repair Estimate
-          </Link>
-        </div>
-      </div>
+  <div style={{ display: 'flex', gap: 10 }}>
+    <Link to="/paint-estimator" className="btn btn-primary">
+      <i className="ti ti-paint" aria-hidden="true" /> New Paint Estimate
+    </Link>
+
+    <Link to="/repair-estimator" className="btn btn-secondary">
+      <i className="ti ti-tool" aria-hidden="true" /> New Repair Estimate
+    </Link>
+  </div>
+
+</div>
 
       {/* Low stock alert */}
       {stats?.lowStockItems > 0 && (

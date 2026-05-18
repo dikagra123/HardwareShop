@@ -78,7 +78,7 @@ export default function Layout() {
             </div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 600, color: 'white' }}>{shopName}</div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>Management System</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}> Repair & Paint Estimator System</div>
             </div>
           </div>
 

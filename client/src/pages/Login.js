@@ -1,158 +1,407 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, Suspense, lazy } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const Scene3D = lazy(() => import('../components/Scene3D'));
+
+const API_URL =
+  process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export default function Login() {
-  const [form, setForm] = useState({ email: 'admin@hardwareshop.com', password: 'admin123' });
+  const [form, setForm] = useState({
+    email: 'admin@hardwareshop.com',
+    password: 'admin123',
+  });
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
+  const [shopName, setShopName] = useState('Hardware Repair Shop');
+
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  // Responsive check
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Fetch settings
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/settings`)
+      .then((r) => {
+        if (r.data.logoUrl) {
+          setLogoUrl(`${API_URL}${r.data.logoUrl}`);
+        }
+
+        if (r.data.shopName) {
+          setShopName(r.data.shopName);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError('');
     setLoading(true);
+
     try {
       await login(form.email, form.password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Check credentials.');
+      setError(
+        err.response?.data?.error ||
+          'Login failed. Check credentials.'
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const [logoUrl, setLogoUrl] = useState('');
-const [shopName, setShopName] = useState('Hardware Repair Shop');
-
-useEffect(() => {
-  axios.get(`${API_URL}/api/settings`)
-    .then(r => {
-      if (r.data.logoUrl) setLogoUrl(`${API_URL}${r.data.logoUrl}`);
-      if (r.data.shopName) setShopName(r.data.shopName);
-    })
-    .catch(() => {});
-}, []);
-
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20
-    }}>
-      <div style={{
-        background: 'rgba(255,255,255,0.05)',
-        backdropFilter: 'blur(20px)',
-        borderRadius: 20, padding: '40px 36px',
-        width: '100%', maxWidth: 400,
-        border: '1px solid rgba(255,255,255,0.1)',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
-      }}>
-        <div style={{ margin: '0 auto 16px', width: 80, height: 80 }}>
-  {logoUrl ? (
-    <img src={logoUrl} alt="Shop Logo"
-      style={{ width: 80, height: 80, borderRadius: 16, objectFit: 'contain',
-        background: 'white', padding: 8 }} />
-  ) : (
-    <div style={{ width: 80, height: 80, borderRadius: 16,
-      background: 'linear-gradient(135deg, #e17055, #d63031)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <i className="ti ti-building-store"
-        style={{ fontSize: 36, color: 'white' }} aria-hidden="true" />
-    </div>
-  )}
-</div>
-<h1 style={{ fontSize: 24, fontWeight: 700, color: 'white', margin: 0 }}>
-  {shopName}
-</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>
-            Repair & Paint Management System
-          </p>
-        </div>
+    <div
+      style={{
+        minHeight: '100vh',
+        background:
+          'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: 1000,
+          display: 'grid',
+          gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr',
+          gap: 40,
+          alignItems: 'center',
+        }}
+      >
+        {/* Left Side */}
+        {isDesktop && (
+          <div>
+            <h2
+              style={{
+                color: 'white',
+                fontSize: 30,
+                fontWeight: 700,
+                marginBottom: 8,
+              }}
+            >
+              {shopName}
+            </h2>
 
-        {error && (
-          <div style={{
-            background: 'rgba(214,48,49,0.2)', border: '1px solid rgba(214,48,49,0.4)',
-            borderRadius: 10, padding: '10px 14px', fontSize: 14,
-            color: '#ff7675', marginBottom: 16
-          }}>
-            {error}
+            <p
+              style={{
+                color: 'rgba(255,255,255,0.6)',
+                fontSize: 14,
+                marginBottom: 24,
+              }}
+            >
+              Paint Estimator System
+            </p>
+
+            <Suspense
+              fallback={
+                <div
+                  style={{
+                    height: 300,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'rgba(255,255,255,0.4)',
+                  }}
+                >
+                  Loading 3D...
+                </div>
+              }
+            >
+              <Scene3D />
+            </Suspense>
+
+            <div style={{ marginTop: 24 }}>
+              {[
+                '🎨 Paint cost estimation',
+                '🔧 Repair cost calculator',
+                '📊 Business analytics',
+                '📲 WhatsApp notifications',
+              ].map((feature, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    marginBottom: 12,
+                    color: 'rgba(255,255,255,0.7)',
+                    fontSize: 14,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: '50%',
+                      background: '#e17055',
+                      flexShrink: 0,
+                    }}
+                  />
+
+                  {feature}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 6 }}>
-              Email Address
-            </label>
-            <input
-              type="email" required
-              value={form.email}
-              onChange={e => setForm({ ...form, email: e.target.value })}
+        {/* Right Side */}
+        <div
+          style={{
+            background: 'rgba(255,255,255,0.05)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 24,
+            padding: '40px 36px',
+            border: '1px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          }}
+        >
+          <div
+            style={{
+              textAlign: 'center',
+              marginBottom: 32,
+            }}
+          >
+            <div
               style={{
-                width: '100%', padding: '10px 14px',
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: 10, fontSize: 14, color: 'white',
-                outline: 'none', boxSizing: 'border-box'
+                margin: '0 auto 16px',
+                width: 72,
+                height: 72,
               }}
-            />
+            >
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt="Logo"
+                  style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: 14,
+                    objectFit: 'contain',
+                    background: 'white',
+                    padding: 6,
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: 14,
+                    margin: '0 auto',
+                    background:
+                      'linear-gradient(135deg,#e17055,#d63031)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <i
+                    className="ti ti-building-store"
+                    style={{
+                      fontSize: 32,
+                      color: 'white',
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            <h1
+              style={{
+                fontSize: 24,
+                fontWeight: 700,
+                color: 'white',
+                margin: 0,
+              }}
+            >
+              Admin Login
+            </h1>
+
+            <p
+              style={{
+                color: 'rgba(255,255,255,0.5)',
+                fontSize: 13,
+                marginTop: 4,
+              }}
+            >
+              {shopName}
+            </p>
           </div>
 
-          <div style={{ marginBottom: 24 }}>
-            <label style={{ display: 'block', fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 6 }}>
-              Password
-            </label>
-            <input
-              type="password" required
-              value={form.password}
-              onChange={e => setForm({ ...form, password: e.target.value })}
+          {error && (
+            <div
               style={{
-                width: '100%', padding: '10px 14px',
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: 10, fontSize: 14, color: 'white',
-                outline: 'none', boxSizing: 'border-box'
+                background: 'rgba(214,48,49,0.2)',
+                border: '1px solid rgba(214,48,49,0.4)',
+                borderRadius: 10,
+                padding: '10px 14px',
+                fontSize: 13,
+                color: '#ff7675',
+                marginBottom: 16,
               }}
-            />
+            >
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: 16 }}>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: 13,
+                  color: 'rgba(255,255,255,0.6)',
+                  marginBottom: 6,
+                }}
+              >
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    email: e.target.value,
+                  })
+                }
+                style={inputStyle}
+              />
+            </div>
+
+            <div style={{ marginBottom: 24 }}>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: 13,
+                  color: 'rgba(255,255,255,0.6)',
+                  marginBottom: 6,
+                }}
+              >
+                Password
+              </label>
+
+              <input
+                type="password"
+                required
+                value={form.password}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    password: e.target.value,
+                  })
+                }
+                style={inputStyle}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background:
+                  'linear-gradient(135deg,#e17055,#d63031)',
+                border: 'none',
+                borderRadius: 10,
+                color: 'white',
+                fontSize: 15,
+                fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+              }}
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+
+          <div
+            style={{
+              marginTop: 16,
+              padding: 12,
+              background: 'rgba(255,255,255,0.05)',
+              borderRadius: 10,
+              fontSize: 12,
+              color: 'rgba(255,255,255,0.4)',
+            }}
+          >
+            <strong
+              style={{
+                color: 'rgba(255,255,255,0.6)',
+              }}
+            >
+              Demo:
+            </strong>{' '}
+            admin@hardwareshop.com / admin123
           </div>
 
-          <button type="submit" disabled={loading} style={{
-            width: '100%', padding: '12px',
-            background: 'linear-gradient(135deg, #e17055, #d63031)',
-            border: 'none', borderRadius: 10,
-            color: 'white', fontSize: 15, fontWeight: 600,
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.7 : 1,
-            transition: 'all 0.2s'
-          }}>
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-
-        <div style={{
-          marginTop: 20, padding: 14,
-          background: 'rgba(255,255,255,0.05)',
-          borderRadius: 10, fontSize: 12,
-          color: 'rgba(255,255,255,0.4)'
-        }}>
-          <strong style={{ color: 'rgba(255,255,255,0.6)' }}>Demo Login:</strong><br />
-          Email: admin@hardwareshop.com<br />
-          Password: admin123
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: 14,
+            }}
+          >
+            <Link
+              to="/customer/login"
+              style={{
+                color: 'rgba(255,255,255,0.4)',
+                fontSize: 13,
+                textDecoration: 'none',
+              }}
+            >
+              Customer?{' '}
+              <span
+                style={{
+                  color: '#25D366',
+                  fontWeight: 600,
+                }}
+              >
+                Login here →
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
-    
+    </div>
   );
 }
 
-<div style={{ textAlign: 'center', marginTop: 16 }}>
-  <a href="/customer/login"
-    style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, textDecoration: 'none' }}>
-    Are you a customer? → Customer Login
-  </a>
-</div>
+const inputStyle = {
+  width: '100%',
+  padding: '10px 14px',
+  background: 'rgba(255,255,255,0.08)',
+  border: '1px solid rgba(255,255,255,0.15)',
+  borderRadius: 10,
+  fontSize: 14,
+  color: 'white',
+  outline: 'none',
+  boxSizing: 'border-box',
+};
