@@ -19,7 +19,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CustomerLogin from './pages/CustomerLogin';
 import CustomerDashboard from './pages/CustomerDashboard';
 import PaintRecommendation from './pages/PaintRecommendation';
-import Scene3D from './components/Scene3D';
+
 
 gsap.registerPlugin(ScrollTrigger);
 

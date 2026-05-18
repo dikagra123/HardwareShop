@@ -239,7 +239,7 @@ export default function Login() {
                 margin: 0,
               }}
             >
-              Admin Login
+              Login
             </h1>
 
             <p
