@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export default function Login() {
   const [form, setForm] = useState({ email: 'admin@hardwareshop.com', password: 'admin123' });
@@ -23,6 +27,18 @@ export default function Login() {
     }
   };
 
+  const [logoUrl, setLogoUrl] = useState('');
+const [shopName, setShopName] = useState('Hardware Repair Shop');
+
+useEffect(() => {
+  axios.get(`${API_URL}/api/settings`)
+    .then(r => {
+      if (r.data.logoUrl) setLogoUrl(`${API_URL}${r.data.logoUrl}`);
+      if (r.data.shopName) setShopName(r.data.shopName);
+    })
+    .catch(() => {});
+}, []);
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -37,19 +53,23 @@ export default function Login() {
         border: '1px solid rgba(255,255,255,0.1)',
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
       }}>
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{
-            width: 64, height: 64, borderRadius: 16, margin: '0 auto 16px',
-            background: 'linear-gradient(135deg, #e17055, #d63031)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            <i className="ti ti-building-store"
-              style={{ fontSize: 32, color: 'white' }}
-              aria-hidden="true" />
-          </div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: 'white', margin: 0 }}>
-            HardwareShop
-          </h1>
+        <div style={{ margin: '0 auto 16px', width: 80, height: 80 }}>
+  {logoUrl ? (
+    <img src={logoUrl} alt="Shop Logo"
+      style={{ width: 80, height: 80, borderRadius: 16, objectFit: 'contain',
+        background: 'white', padding: 8 }} />
+  ) : (
+    <div style={{ width: 80, height: 80, borderRadius: 16,
+      background: 'linear-gradient(135deg, #e17055, #d63031)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <i className="ti ti-building-store"
+        style={{ fontSize: 36, color: 'white' }} aria-hidden="true" />
+    </div>
+  )}
+</div>
+<h1 style={{ fontSize: 24, fontWeight: 700, color: 'white', margin: 0 }}>
+  {shopName}
+</h1>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginTop: 4 }}>
             Repair & Paint Management System
           </p>
@@ -126,7 +146,7 @@ export default function Login() {
           Password: admin123
         </div>
       </div>
-    </div>
+    
   );
 }
 

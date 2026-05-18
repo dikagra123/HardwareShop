@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
 import { getDashboardStats, getJobs } from '../api';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [recentJobs, setRecentJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [logoUrl, setLogoUrl] = useState('');
+
+useEffect(() => {
+  axios.get(`${API_URL}/api/settings`)
+    .then(r => { if (r.data.logoUrl) setLogoUrl(`${API_URL}${r.data.logoUrl}`); })
+    .catch(() => {});
+}, []);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -46,6 +56,24 @@ export default function Dashboard() {
   return (
     <div>
       {/* Header */}
+
+      <div className="page-header">
+  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+    {logoUrl && (
+      <img src={logoUrl} alt="Shop Logo"
+        style={{ width: 48, height: 48, borderRadius: 10,
+          objectFit: 'contain', background: 'white',
+          padding: 4, border: '1px solid #dfe6e9' }} />
+    )}
+    <div>
+      <h1 className="page-title">Dashboard</h1>
+      <p style={{ color: '#636e72', fontSize: 14, marginTop: 4 }}>
+        Monitor your hardware business analytics
+      </p>
+    </div>
+  </div>
+</div>
+
       <div className="page-header">
         <div>
           <h1 className="page-title">Dashboard</h1>
