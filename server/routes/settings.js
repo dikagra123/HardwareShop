@@ -69,11 +69,16 @@ router.post('/logo', authMiddleware, (req, res) => {
 
     const logoBase64 = `data:${mimeType || 'image/png'};base64,${base64}`;
     const current = readSettings();
-    const updated = { ...current, logoBase64, logoUrl: '', updatedAt: new Date().toISOString() };
+    const updated = {
+      ...current,
+      logoBase64,
+      logoUrl: '',
+      updatedAt: new Date().toISOString()
+    };
     writeSettings(updated);
-
     res.json({ success: true, logoBase64 });
   } catch (err) {
+    console.error('Logo upload error:', err);
     res.status(500).json({ error: err.message });
   }
 });

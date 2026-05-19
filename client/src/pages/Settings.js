@@ -46,24 +46,24 @@ export default function Settings() {
   if (!file) return;
   setUploadingLogo(true);
   try {
-    // Convert file to Base64
     const reader = new FileReader();
     reader.onload = async (e) => {
       const base64String = e.target.result.split(',')[1];
       const mimeType = file.type;
 
-      const res = await axios.post(`${API_URL}/api/settings/logo`,
+      const res = await axios.post(
+        `${API_URL}/api/settings/logo`,
         { base64: base64String, mimeType },
         { headers }
       );
 
       setLogoPreview(res.data.logoBase64);
-      setSettings(s => ({ ...s, logoBase64: res.data.logoBase64, logoUrl: '' }));
-      setMsg('✅ Logo uploaded and saved permanently!');
+      setSettings(s => ({ ...s, logoBase64: res.data.logoBase64 }));
+      setMsg('✅ Logo saved permanently!');
     };
     reader.readAsDataURL(file);
   } catch (err) {
-    setMsg('❌ Logo upload failed: ' + (err.response?.data?.error || err.message));
+    setMsg('❌ ' + (err.response?.data?.error || err.message));
   } finally {
     setUploadingLogo(false);
   }
