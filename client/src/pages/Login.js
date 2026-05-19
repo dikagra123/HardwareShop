@@ -363,31 +363,7 @@ export default function Login() {
             admin@hardwareshop.com / admin123
           </div>
 
-          <div
-            style={{
-              textAlign: 'center',
-              marginTop: 14,
-            }}
-          >
-            <Link
-              to="/customer/login"
-              style={{
-                color: 'rgba(255,255,255,0.4)',
-                fontSize: 13,
-                textDecoration: 'none',
-              }}
-            >
-              Customer?{' '}
-              <span
-                style={{
-                  color: '#25D366',
-                  fontWeight: 600,
-                }}
-              >
-                Login here →
-              </span>
-            </Link>
-          </div>
+         
         </div>
       </div>
     </div>

@@ -16,8 +16,7 @@ import Settings from './pages/Settings';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Add imports at top
-import CustomerLogin from './pages/CustomerLogin';
-import CustomerDashboard from './pages/CustomerDashboard';
+
 import PaintRecommendation from './pages/PaintRecommendation';
 
 
@@ -48,9 +47,7 @@ function App() {
             <Route path="paint-recommendation" element={<PaintRecommendation />} />
             <Route path="settings" element={<Settings />} />
             {/* // Add routes inside <Routes> (outside PrivateRoute) */}
-<Route path="/customer/login" element={<CustomerLogin />} />
-<Route path="/customer/dashboard" element={<CustomerDashboard />} />
-            
+
           </Route>
         </Routes>
       </BrowserRouter>
