@@ -30,13 +30,15 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/settings`)
-      .then(r => {
-        if (r.data.logoUrl) setLogoUrl(`${API_URL}${r.data.logoUrl}`);
-        if (r.data.shopName) setShopName(r.data.shopName);
-      })
-      .catch(() => {});
-  }, []);
+  axios.get(`${API_URL}/api/settings`)
+    .then(r => {
+      // Use Base64 logo (permanent) or URL logo
+      if (r.data.logoBase64) setLogoUrl(r.data.logoBase64);
+      else if (r.data.logoUrl) setLogoUrl(`${API_URL}${r.data.logoUrl}`);
+      if (r.data.shopName) setShopName(r.data.shopName);
+    })
+    .catch(() => {});
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

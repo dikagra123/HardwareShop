@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { authMiddleware } = require('../middleware/auth');
 
-// Store settings in a JSON file
 const settingsFile = path.join(__dirname, '../data/settings.json');
 const dataDir = path.join(__dirname, '../data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
 const defaultSettings = {
-  shopName: 'HardwareShop',
-  tagline: 'Repair & Paint Estimation System',
+  shopName: 'Hardware Repair Shop',
+  tagline: 'Paint Estimator System',
   phone: '', phone2: '', email: '',
   address: '', city: '', state: '', pincode: '',
-  gstNumber: '', taxPercent: 0, logoUrl: '',
+  gstNumber: '', taxPercent: 0,
+  logoBase64: '',
+  logoUrl: '',
   workingHours: {
     monday:    { open: '09:00', close: '18:00', isOpen: true },
     tuesday:   { open: '09:00', close: '18:00', isOpen: true },
@@ -41,26 +41,9 @@ const readSettings = () => {
 };
 
 const writeSettings = (data) => {
+  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
   fs.writeFileSync(settingsFile, JSON.stringify(data, null, 2));
 };
-
-// Logo upload config
-const logoDir = path.join(__dirname, '../uploads/logo');
-if (!fs.existsSync(logoDir)) fs.mkdirSync(logoDir, { recursive: true });
-
-const logoStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, logoDir),
-  filename: (req, file, cb) => cb(null, `shop-logo${path.extname(file.originalname)}`)
-});
-
-const logoUpload = multer({
-  storage: logoStorage,
-  fileFilter: (req, file, cb) => {
-    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/svg+xml'];
-    allowed.includes(file.mimetype) ? cb(null, true) : cb(new Error('Only image files allowed'));
-  },
-  limits: { fileSize: 2 * 1024 * 1024 }
-});
 
 // GET /api/settings
 router.get('/', (req, res) => {
@@ -78,19 +61,18 @@ router.put('/', authMiddleware, (req, res) => {
   }
 });
 
-// POST /api/settings/logo
-router.post('/logo', authMiddleware, (req, res, next) => {
-  logoUpload.single('logo')(req, res, (err) => {
-    if (err) return res.status(400).json({ error: err.message });
-    next();
-  });
-}, (req, res) => {
+// POST /api/settings/logo — save logo as Base64
+router.post('/logo', authMiddleware, (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: 'No logo uploaded' });
-    const logoUrl = `/uploads/logo/${req.file.filename}`;
-    const updated = { ...readSettings(), logoUrl, updatedAt: new Date().toISOString() };
+    const { base64, mimeType } = req.body;
+    if (!base64) return res.status(400).json({ error: 'No logo data provided' });
+
+    const logoBase64 = `data:${mimeType || 'image/png'};base64,${base64}`;
+    const current = readSettings();
+    const updated = { ...current, logoBase64, logoUrl: '', updatedAt: new Date().toISOString() };
     writeSettings(updated);
-    res.json({ success: true, logoUrl });
+
+    res.json({ success: true, logoBase64 });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -100,11 +82,7 @@ router.post('/logo', authMiddleware, (req, res, next) => {
 router.delete('/logo', authMiddleware, (req, res) => {
   try {
     const current = readSettings();
-    if (current.logoUrl) {
-      const filePath = path.join(__dirname, '..', current.logoUrl);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    }
-    const updated = { ...current, logoUrl: '', updatedAt: new Date().toISOString() };
+    const updated = { ...current, logoBase64: '', logoUrl: '', updatedAt: new Date().toISOString() };
     writeSettings(updated);
     res.json({ success: true });
   } catch (err) {

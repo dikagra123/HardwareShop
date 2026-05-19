@@ -17,14 +17,16 @@ export default function Settings() {
   const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/settings`)
-      .then(r => {
-        setSettings(r.data);
-        if (r.data.logoUrl) setLogoPreview(`${API_URL}${r.data.logoUrl}`);
-      })
-      .catch(() => setMsg('❌ Failed to load settings'))
-      .finally(() => setLoading(false));
-  }, []);
+  axios.get(`${API_URL}/api/settings`)
+    .then(r => {
+      setSettings(r.data);
+      // Show logo from Base64 or URL
+      if (r.data.logoBase64) setLogoPreview(r.data.logoBase64);
+      else if (r.data.logoUrl) setLogoPreview(`${API_URL}${r.data.logoUrl}`);
+    })
+    .catch(() => setMsg('❌ Failed to load settings'))
+    .finally(() => setLoading(false));
+}, []);
 
   const save = async () => {
     setSaving(true);
@@ -40,24 +42,32 @@ export default function Settings() {
     }
   };
 
-  const handleLogoUpload = async (file) => {
-    if (!file) return;
-    setUploadingLogo(true);
-    try {
-      const formData = new FormData();
-      formData.append('logo', file);
-      const res = await axios.post(`${API_URL}/api/settings/logo`, formData, {
-        headers: { ...headers, 'Content-Type': 'multipart/form-data' }
-      });
-      setLogoPreview(`${API_URL}${res.data.logoUrl}`);
-      setSettings(s => ({ ...s, logoUrl: res.data.logoUrl }));
-      setMsg('✅ Logo uploaded!');
-    } catch (err) {
-      setMsg('❌ Logo upload failed: ' + (err.response?.data?.error || err.message));
-    } finally {
-      setUploadingLogo(false);
-    }
-  };
+ const handleLogoUpload = async (file) => {
+  if (!file) return;
+  setUploadingLogo(true);
+  try {
+    // Convert file to Base64
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64String = e.target.result.split(',')[1];
+      const mimeType = file.type;
+
+      const res = await axios.post(`${API_URL}/api/settings/logo`,
+        { base64: base64String, mimeType },
+        { headers }
+      );
+
+      setLogoPreview(res.data.logoBase64);
+      setSettings(s => ({ ...s, logoBase64: res.data.logoBase64, logoUrl: '' }));
+      setMsg('✅ Logo uploaded and saved permanently!');
+    };
+    reader.readAsDataURL(file);
+  } catch (err) {
+    setMsg('❌ Logo upload failed: ' + (err.response?.data?.error || err.message));
+  } finally {
+    setUploadingLogo(false);
+  }
+};
 
   const handleDeleteLogo = async () => {
     if (!window.confirm('Remove shop logo?')) return;
