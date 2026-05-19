@@ -163,7 +163,7 @@ export default function Layout() {
           </button>
 
           <div style={{ fontSize: 14, color: '#636e72' }}>
-            Welcome back, <strong>{user?.name}</strong>
+             <strong> Welcome Back! </strong>
           </div>
           <div style={{ fontSize: 12, color: '#636e72' }}>
             {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
