@@ -6,9 +6,6 @@ A full-stack MERN web application that helps hardware shop owners digitally mana
 
 A full-stack MERN web application that helps hardware shop owners digitally manage their entire business — from customer management to paint cost estimation, job tracking, inventory, invoices and WhatsApp notifications.
 
-🌐 Live Demo: https://hardwareshop03.netlify.app/
-
-
 🎯 About the Project
 
 Hardware shop owners in India calculate paint costs and repair estimates manually on paper — leading to wrong estimates, no records and unprofessional billing. This system solves that problem by automating paint quantity calculation, tracking jobs from start to finish and sending WhatsApp notifications to customers instantly.
