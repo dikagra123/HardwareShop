@@ -2,8 +2,6 @@
 
 A **full-stack MERN web application** designed to help hardware and repair shop owners digitally manage their entire business — from customer management and paint estimation to job tracking, inventory, invoicing, and WhatsApp notifications.
 
-🌐 **Live Demo: https://hardwareshop-frontend-klox.onrender.com
-
 ---
 
 ## 🎯 About the Project
