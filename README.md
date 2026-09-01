@@ -1,148 +1,199 @@
-🏪 Hardware Repair Shop & Paint Estimation System
+# 🏪 Hardware Repair Shop & Paint Estimation System
 
-A full-stack MERN web application designed to help hardware and repair shop owners digitally manage their entire business — from customer management and paint estimation to job tracking, inventory, invoicing, and WhatsApp notifications.
+A **full-stack MERN web application** designed to help hardware and repair shop owners digitally manage their entire business — from customer management and paint estimation to job tracking, inventory, invoicing, and WhatsApp notifications.
 
-🌐 Live Demo: https://hardwareshop-frontend-klox.onrender.com
+🌐 **Live Demo: https://hardwareshop-frontend-klox.onrender.com
 
-🎯 About the Project
+---
+
+## 🎯 About the Project
 
 Hardware and repair shop owners often calculate paint costs and repair estimates manually, which can lead to:
 
-❌ Incorrect cost calculations
-❌ Loss of customer and job records
-❌ Difficulty tracking ongoing repairs
-❌ Manual inventory management
-❌ Unprofessional billing and invoicing
-❌ Delayed customer communication
+* ❌ Incorrect cost calculations
+* ❌ Loss of customer and job records
+* ❌ Difficulty tracking ongoing repairs
+* ❌ Manual inventory management
+* ❌ Unprofessional billing and invoicing
+* ❌ Delayed customer communication
 
-This system provides a centralized digital solution that automates these processes.
+This system provides a **centralized digital solution** that automates these processes.
 
 The application calculates paint quantities and costs based on room dimensions, estimates repair costs, tracks jobs from start to completion, manages inventory, generates invoices, and sends WhatsApp notifications to customers.
 
-✨ Key Features
+---
 
-🎨 Paint Estimator
-Calculates required paint quantity based on room dimensions
-Estimates total paint cost
-Supports 30+ paint brands
-Includes market-based paint pricing
-Supports brands such as Asian Paints, Berger, and Nerolac
-Provides paint recommendations based on wall/room type
+## ✨ Key Features
 
-🔧 Repair Cost Estimator
+### 🎨 Paint Estimator
 
-Provides instant repair cost estimates
-Supports 10+ repair types
-Provides detailed cost breakdowns
-Includes urgency-based cost calculation
+* Calculates required paint quantity based on room dimensions
+* Estimates total paint cost
+* Supports **30+ paint brands**
+* Includes market-based paint pricing
+* Supports brands such as **Asian Paints, Berger, and Nerolac**
+* Provides paint recommendations based on wall/room type
 
-👥 Customer Management
+### 🔧 Repair Cost Estimator
 
-Complete customer CRUD operations
-Search and manage customer records
-View customer job history
-Maintain customer information digitally
+* Provides instant repair cost estimates
+* Supports **10+ repair types**
+* Provides detailed cost breakdowns
+* Includes urgency-based cost calculation
 
-📋 Job Order Tracking
+### 👥 Customer Management
+
+* Complete customer CRUD operations
+* Search and manage customer records
+* View customer job history
+* Maintain customer information digitally
+
+### 📋 Job Order Tracking
 
 Track jobs through different stages:
 
-Pending → Approved → In Progress → Completed
+`Pending → Approved → In Progress → Completed`
 
-Manage repair and paint jobs
-Update job status
-Track job progress
-Maintain complete job history
+* Manage repair and paint jobs
+* Update job status
+* Track job progress
+* Maintain complete job history
 
-📦 Inventory Management
+### 📦 Inventory Management
 
-Track available stock
-Monitor inventory levels
-Identify low-stock items
-Manage inventory efficiently
+* Track available stock
+* Monitor inventory levels
+* Identify low-stock items
+* Manage inventory efficiently
 
-🧾 Invoice Generation
+### 🧾 Invoice Generation
 
-Automatically generate invoices
-Track payments
-Maintain invoice records
-Customize invoice information
-📸 Damage Photo Upload
-Upload repair/damage photos
-Drag-and-drop file uploading
-Attach images directly to repair jobs
+* Automatically generate invoices
+* Track payments
+* Maintain invoice records
+* Customize invoice information
 
-📲 WhatsApp Notifications
+### 📸 Damage Photo Upload
+
+* Upload repair/damage photos
+* Drag-and-drop file uploading
+* Attach images directly to repair jobs
+
+### 📲 WhatsApp Notifications
 
 Send instant customer notifications for:
 
-Paint estimates
-Repair estimates
-Job status updates
-Invoice details
-📊 Analytics Dashboard
+* Paint estimates
+* Repair estimates
+* Job status updates
+* Invoice details
+
+### 📊 Analytics Dashboard
 
 Provides business insights through:
 
-Revenue charts
-Job status distribution
-Business performance metrics
-Job and customer statistics
-🎨 Paint Recommendation System
+* Revenue charts
+* Job status distribution
+* Business performance metrics
+* Job and customer statistics
+
+### 🎨 Paint Recommendation System
 
 Recommends suitable paints based on different areas such as:
 
-🛏️ Bedroom
-🍳 Kitchen
-🏠 Exterior
-🛋️ Living Room
-And other wall types
-⚙️ Settings Management
+* 🛏️ Bedroom
+* 🍳 Kitchen
+* 🏠 Exterior
+* 🛋️ Living Room
+* And other wall types
+
+### ⚙️ Settings Management
 
 Shop owners can customize:
 
-Shop logo
-Tax settings
-Working hours
-Invoice settings
-Business information
-📱 Fully Responsive
+* Shop logo
+* Tax settings
+* Working hours
+* Invoice settings
+* Business information
 
 
-🛠️ Tech Stack
+# 🛠️ Tech Stack
 
-Frontend
-Technology	Purpose
-React.js	UI Framework
-React Router DOM	Page Navigation
-Axios	API Communication
-Recharts	Analytics & Data Visualization
-Tabler Icons	Icon Library
-CSS	Styling & Animations
-Backend
-Technology	Purpose
-Node.js	Server Runtime
-Express.js	Web Framework
-JWT	Authentication
-Bcrypt.js	Password Hashing
-Multer	File Upload Handling
-Mongoose	MongoDB ODM
-Database & Deployment
-Technology	Purpose
-MongoDB Atlas	Cloud Database
-Netlify	Frontend Hosting
-Render	Backend Hosting
-GitHub	Version Control
+## Frontend
 
-🔐 Security
+| Technology           | Purpose                        |
+| -------------------- | ------------------------------ |
+| **React.js**         | UI Framework                   |
+| **React Router DOM** | Page Navigation                |
+| **Axios**            | API Communication              |
+| **Recharts**         | Analytics & Data Visualization |
+| **Tabler Icons**     | Icon Library                   |
+| **CSS**              | Styling & Animations           |
+
+## Backend
+
+| Technology     | Purpose              |
+| -------------- | -------------------- |
+| **Node.js**    | Server Runtime       |
+| **Express.js** | Web Framework        |
+| **JWT**        | Authentication       |
+| **Bcrypt.js**  | Password Hashing     |
+| **Multer**     | File Upload Handling |
+| **Mongoose**   | MongoDB ODM          |
+
+## Database & Deployment
+
+| Technology        | Purpose          |
+| ----------------- | ---------------- |
+| **MongoDB Atlas** | Cloud Database   |
+| **Render**        | Backend & frontend Hosting  |
+| **GitHub**        | Version Control  |
+
+---
+
+# 🏗️ Application Workflow
+
+```text
+Customer
+   ↓
+Create Customer / Job
+   ↓
+Select Service
+   ↓
+┌─────────────────────────┐
+│ Paint Estimation        │
+│ Repair Cost Estimation  │
+└─────────────────────────┘
+   ↓
+Generate Estimate
+   ↓
+Customer Approval
+   ↓
+Job Tracking
+   ↓
+Inventory Management
+   ↓
+Job Completion
+   ↓
+Generate Invoice
+   ↓
+WhatsApp Notification
+```
+
+
+# 🔐 Security
 
 The application includes:
 
-JWT-based authentication
-Password hashing using Bcrypt.js
-Protected API routes
-Environment variables for sensitive credentials
-Secure file upload handling
+* JWT-based authentication
+* Password hashing using Bcrypt.js
+* Protected API routes
+* Environment variables for sensitive credentials
+* Secure file upload handling
+
+
+
 
 <img width="950" height="503" alt="Screenshot 2026-05-19 225151" src="https://github.com/user-attachments/assets/8d7de4e9-590a-41d4-a759-8b24097fc979" />
 
