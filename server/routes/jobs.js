@@ -36,35 +36,47 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { jobId, taxPercent, discount } = req.body;
+  const {
+    customerId,
+    customer,
+    jobType,
+    description,
+    address,
+    scheduledDate,
+    notes,
+    workerId,
+    worker,
+    totalEstimate,
+    paintEstimates,
+    repairItems,
+    status
+  } = req.body;
+
   try {
-    // Check if invoice already exists
-    const existing = await Invoice.findOne({ job: jobId });
-    if (existing) return res.status(400).json({ error: 'Invoice already exists for this job' });
+    const custId = customerId || customer;
+    if (!custId) {
+      return res.status(400).json({ error: 'Customer is required to create a job' });
+    }
 
-    const job = await Job.findById(jobId).populate('customer');
-    if (!job) return res.status(404).json({ error: 'Job not found' });
-
-    const subtotal = parseFloat(job.totalEstimate || 0);
-    const tax = parseFloat(taxPercent || 0);
-    const disc = parseFloat(discount || 0);
-    const taxAmount = parseFloat(((subtotal * tax) / 100).toFixed(2));
-    const totalAmount = parseFloat((subtotal + taxAmount - disc).toFixed(2));
-    const invoiceNumber = `INV-${Date.now()}`;
-
-    const invoice = await Invoice.create({
-      job: jobId,
-      invoiceNumber,
-      subtotal,
-      taxPercent: tax,
-      taxAmount,
-      discount: disc,
-      totalAmount,
-      paidAmount: 0,
-      paymentStatus: 'unpaid'
+    const job = await Job.create({
+      customer: custId,
+      jobType: jobType || 'repair',
+      description: description || '',
+      address: address || '',
+      scheduledDate: scheduledDate || undefined,
+      notes: notes || '',
+      worker: workerId || worker || undefined,
+      totalEstimate: parseFloat(totalEstimate || 0),
+      paintEstimates: paintEstimates || [],
+      repairItems: repairItems || [],
+      status: status || 'pending'
     });
 
-    res.status(201).json(invoice);
+    const populated = await Job.findById(job._id)
+      .populate('customer', 'name phone email')
+      .populate('worker', 'name phone');
+
+    res.status(201).json(populated);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

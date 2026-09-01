@@ -114,19 +114,23 @@ export default function Customers() {
               <tbody>
                 {customers.length === 0 ? (
                   <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#636e72' }}>No customers found</td></tr>
-                ) : customers.map(c => (
-                  <tr key={c.id}>
-                    <td style={{ color: '#0984e3', fontWeight: 600 }}>{c.id}</td>
-                    <td style={{ fontWeight: 500 }}>{c.name}</td>
-                    <td><a href={`tel:${c.phone}`} style={{ color: '#00b894' }}>{c.phone}</a></td>
-                    <td>{c.email || '—'}</td>
-                    <td style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.address || '—'}</td>
-                    <td>{new Date(c.created_at).toLocaleDateString('en-IN')}</td>
-                    <td>
-                      <button onClick={() => handleDelete(c.id, c.name)} className="btn btn-danger btn-sm">Delete</button>
-                    </td>
-                  </tr>
-                ))}
+                ) : customers.map(c => {
+                  const id = c._id || c.id;
+                  const dateStr = c.createdAt || c.created_at;
+                  return (
+                    <tr key={id}>
+                      <td style={{ color: '#0984e3', fontWeight: 600 }}>#{String(id).slice(-5).toUpperCase()}</td>
+                      <td style={{ fontWeight: 500 }}>{c.name}</td>
+                      <td><a href={`tel:${c.phone}`} style={{ color: '#00b894' }}>{c.phone}</a></td>
+                      <td>{c.email || '—'}</td>
+                      <td style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.address || '—'}</td>
+                      <td>{dateStr ? new Date(dateStr).toLocaleDateString('en-IN') : '—'}</td>
+                      <td>
+                        <button onClick={() => handleDelete(id, c.name)} className="btn btn-danger btn-sm">Delete</button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

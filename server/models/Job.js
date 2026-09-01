@@ -19,6 +19,15 @@ const repairItemSchema = new mongoose.Schema({
   totalCost: Number,
 });
 
+const damagePhotoSchema = new mongoose.Schema({
+  filename: String,
+  originalName: String,
+  url: String,
+  size: Number,
+  description: String,
+  uploadedAt: { type: Date, default: Date.now },
+});
+
 const jobSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
   worker: { type: mongoose.Schema.Types.ObjectId, ref: 'Worker' },
@@ -31,6 +40,7 @@ const jobSchema = new mongoose.Schema({
   notes: String,
   paintEstimates: [paintEstimateSchema],
   repairItems: [repairItemSchema],
+  damagePhotos: [damagePhotoSchema],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Job', jobSchema);

@@ -28,15 +28,21 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.use('/api/auth',      require('./routes/auth'));
-app.use('/api/customers', require('./routes/customers'));
-app.use('/api/jobs',      require('./routes/jobs'));
-app.use('/api/estimates', require('./routes/estimates'));
-app.use('/api/invoices',  require('./routes/invoices'));
-app.use('/api/inventory', require('./routes/inventory'));
-app.use('/api/uploads',   require('./routes/uploads'));
-app.use('/api/notify',    require('./routes/notifications'));
-app.use('/api/settings',  require('./routes/settings'));
+app.use('/api/auth',            require('./routes/auth'));
+app.use('/api/customer-auth',   require('./routes/customerAuth'));
+app.use('/api/customer-portal', require('./routes/customerPortal'));
+app.use('/api/customers',       require('./routes/customers'));
+app.use('/api/jobs',            require('./routes/jobs'));
+app.use('/api/estimates',       require('./routes/estimates'));
+app.use('/api/invoices',        require('./routes/invoices'));
+app.use('/api/inventory',       require('./routes/inventory'));
+app.use('/api/uploads',         require('./routes/uploads'));
+app.use('/api/notify',          require('./routes/notifications'));
+app.use('/api/settings',        require('./routes/settings'));
+
+app.get('/', (req, res) => {
+  res.json({ status: 'OK', message: 'Hardware Shop API is live', timestamp: new Date() });
+});
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Hardware Shop API running', timestamp: new Date() });

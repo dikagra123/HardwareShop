@@ -7,8 +7,9 @@ const Material = require('./models/Material');
 const Worker = require('./models/Worker');
 
 async function seed() {
-  await mongoose.connect(process.env.MONGODB_URI);
-  console.log('Connected...');
+  const uri = (process.env.MONGODB_URI || '').trim();
+  await mongoose.connect(uri);
+  console.log('Connected to MongoDB for seeding...');
 
   // Admin user
   const hashed = await bcrypt.hash('admin123', 10);

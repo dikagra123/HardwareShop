@@ -10,18 +10,16 @@ import PaintEstimator from './pages/PaintEstimator';
 import RepairEstimator from './pages/RepairEstimator';
 import Inventory from './pages/Inventory';
 import Invoices from './pages/Invoices';
-import './index.css';
 import Charts from './pages/Charts';
 import Settings from './pages/Settings';
+import PaintRecommendation from './pages/PaintRecommendation';
+import CustomerLogin from './pages/CustomerLogin';
+import CustomerDashboard from './pages/CustomerDashboard';
+import './index.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-// Add imports at top
-
-import PaintRecommendation from './pages/PaintRecommendation';
-
 
 gsap.registerPlugin(ScrollTrigger);
-
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth();
@@ -34,6 +32,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/customer/login" element={<CustomerLogin />} />
+          <Route path="/customer/dashboard" element={<CustomerDashboard />} />
           <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Dashboard />} />
             <Route path="customers" element={<Customers />} />
@@ -46,13 +46,12 @@ function App() {
             <Route path="charts" element={<Charts />} />
             <Route path="paint-recommendation" element={<PaintRecommendation />} />
             <Route path="settings" element={<Settings />} />
-            {/* // Add routes inside <Routes> (outside PrivateRoute) */}
-
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
 }
 
-export default App;
+export default App;

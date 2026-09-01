@@ -1,0 +1,12 @@
+{
+  "name": "hardware-shop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hardware Shop Repair & Paint Estimation System",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build"
+  }
+}
