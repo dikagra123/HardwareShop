@@ -2,7 +2,7 @@
 
 A full-stack MERN web application that helps hardware shop owners digitally manage their entire business — from customer management to paint cost estimation, job tracking, inventory, invoices and WhatsApp notifications.
 
-🌐 Live Demo: 🏪 Hardware Repair Shop & Paint Estimation System
+🌐 Live Demo: https://hardwareshop-frontend-klox.onrender.com
 
 A full-stack MERN web application that helps hardware shop owners digitally manage their entire business — from customer management to paint cost estimation, job tracking, inventory, invoices and WhatsApp notifications.
 
